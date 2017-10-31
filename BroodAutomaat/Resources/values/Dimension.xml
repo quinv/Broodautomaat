@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="Title">26dp</dimen>
+  <dimen name="TitlePadding">20dp</dimen>
+  <dimen name="fontSize">22dp</dimen>
+
+  <dimen name="bakkerButtonMargin">30dp</dimen>
+  <dimen name="bakkerButtonMarginActive">-10dp</dimen>
+</resources>
+

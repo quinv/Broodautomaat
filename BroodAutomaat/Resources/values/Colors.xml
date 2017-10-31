@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="Background">#ff37322c</color>
+  <color name="TitleBackground">#fffcf7d9</color>
+  <color name="Title">#ff433e37</color>
+  <color name="Accent">#ffef9232</color>
+  <color name="SelectionBox">#ffa2907b</color>
+  <color name="BakkerButton">#ffA3907B</color>
+</resources>
