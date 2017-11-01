@@ -28,6 +28,13 @@ namespace BroodAutomaat
             typeface = Typeface.CreateFromAsset(assets, assetsFontFileName);
         }
 
+        public static void ChangeTypeFaceToKrungthep(View customView, AssetManager Assets)
+        {
+
+            FontChangeCrawler fontChangeCrawler = new FontChangeCrawler(Typeface.CreateFromAsset(Assets, "Fonts/krungthep.ttf"));
+            fontChangeCrawler.ReplaceFonts(customView as ViewGroup);
+        }
+
         public void ReplaceFonts(ViewGroup viewTree)
         {
             View child;

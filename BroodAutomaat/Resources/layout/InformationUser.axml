@@ -30,7 +30,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1"
+        android:id="@+id/info_block"
         android:textSize="@dimen/fontSize"
         android:textColor="@color/Title"
         android:paddingRight="20dp"

@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">BroodAutomaat</string>
+
+  <string name="info_home">info 1</string>
+  <string name="info_bakker_automaten">info 2</string>
+  <string name="info_bakker_aanvullen">info 3</string>
+  <string name="info_bakker_statistieken">info 4</string>
+  <string name="info_bakker_route">info 5</string>
 </resources>

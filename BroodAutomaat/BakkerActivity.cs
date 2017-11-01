@@ -7,11 +7,22 @@ using Android.Graphics;
 
 namespace BroodAutomaat
 {
+
     [Activity(Label = "BroodAutomaat", Icon = "@mipmap/icon", ScreenOrientation = ScreenOrientation.Landscape,
         Theme = "@android:style/Theme.DeviceDefault.NoActionBar")]
     public class BakkerActivity : Activity
     {
         Button[] buttonsBakker = new Button[4];
+
+        private enum BakkerSelection
+        {
+            automaten,
+            aanvullen,
+            statistieken,
+            route
+        }
+
+        private BakkerSelection activeButton = BakkerSelection.automaten;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -29,10 +40,10 @@ namespace BroodAutomaat
             Button helpButton = FindViewById<Button>(Resource.Id.button_help);
             helpButton.Click += Help;
 
-            buttonsBakker[0] = FindViewById<Button>(Resource.Id.button_automaten);
-            buttonsBakker[1] = FindViewById<Button>(Resource.Id.button_aanvullen);
-            buttonsBakker[2] = FindViewById<Button>(Resource.Id.button_statistieken);
-            buttonsBakker[3] = FindViewById<Button>(Resource.Id.button_route);
+            buttonsBakker[(int)BakkerSelection.automaten] = FindViewById<Button>(Resource.Id.button_automaten);
+            buttonsBakker[(int)BakkerSelection.aanvullen] = FindViewById<Button>(Resource.Id.button_aanvullen);
+            buttonsBakker[(int)BakkerSelection.statistieken] = FindViewById<Button>(Resource.Id.button_statistieken);
+            buttonsBakker[(int)BakkerSelection.route] = FindViewById<Button>(Resource.Id.button_route);
 
             for (int i = 0; i < buttonsBakker.Length; i++)
             {
@@ -50,41 +61,50 @@ namespace BroodAutomaat
             }
 
             Button btn = sender as Button;
-            int activebutton;
             switch (btn.Id)
             {
                 case Resource.Id.button_automaten:
-                    activebutton = 0;
+                    activeButton = BakkerSelection.automaten;
                     break;
                 case Resource.Id.button_aanvullen:
-                    activebutton = 1;
+                    activeButton = BakkerSelection.aanvullen;
                     break;
                 case Resource.Id.button_statistieken:
-                    activebutton = 2;
+                    activeButton = BakkerSelection.statistieken;
                     break;
                 case Resource.Id.button_route:
-                    activebutton = 3;
+                    activeButton = BakkerSelection.route;
                     break;
                 default:
-                    activebutton = 0;
+                    activeButton = BakkerSelection.automaten;
                     break;
             }
-            LinearLayout.LayoutParams layoutParams = buttonsBakker[activebutton].LayoutParameters as LinearLayout.LayoutParams;
+            LinearLayout.LayoutParams layoutParams = buttonsBakker[(int)activeButton].LayoutParameters as LinearLayout.LayoutParams;
             layoutParams.RightMargin = Resources.GetDimensionPixelSize(Resource.Dimension.bakkerButtonMarginActive);
-            buttonsBakker[activebutton].LayoutParameters = layoutParams;
+            buttonsBakker[(int)activeButton].LayoutParameters = layoutParams;
         }
 
         private void Help(object sender, System.EventArgs e)
         {
-            View customView = LayoutInflater.Inflate(Resource.Layout.InformationUser, null);
-            customView.Background = Resources.GetDrawable(Resource.Drawable.RoundedButton, null);
-            AlertDialog builder = new AlertDialog.Builder(this).Create();
-            builder.SetView(customView);
-            builder.Show();
-
-            FontChangeCrawler fontChangeCrawler = new FontChangeCrawler(Typeface.CreateFromAsset(Assets, "Fonts/krungthep.ttf"));
-            fontChangeCrawler.ReplaceFonts(customView as ViewGroup);
-
+            //add info dependant on current selection
+            int customTextID;
+            switch (activeButton)
+            {
+                case BakkerSelection.automaten:
+                    customTextID = Resource.String.info_bakker_automaten;
+                    break;
+                case BakkerSelection.aanvullen:
+                    customTextID = Resource.String.info_bakker_aanvullen;
+                    break;
+                case BakkerSelection.statistieken:
+                    customTextID = Resource.String.info_bakker_statistieken;
+                    break;
+                case BakkerSelection.route:
+                default:
+                    customTextID = Resource.String.info_bakker_route;
+                    break;
+            }
+            OverlayWindow.CreateOverlayFromView(Resource.Layout.InformationUser, customTextID, Assets, this);
         }
 
         private void BakkerLogOut(object sender, System.EventArgs e)

@@ -37,13 +37,27 @@
             android:paddingTop="5dip"
             android:textSize="@dimen/fontSize"
             android:textStyle="bold" />
+        <TextView
+            android:text="5km"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/range_value"
+            android:textStyle="bold"
+            android:textSize="24dp"
+            android:textColor="@android:color/background_light"
+            android:gravity="center"
+            android:layout_marginBottom="-25dp"
+            android:layout_marginTop="25dp" />
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:thumbTint="@color/Accent"
             android:progressTint="@color/Accent"
-            android:id="@+id/seekBar1"
-            android:padding="30dp" />
+            android:id="@+id/seekBar_range"
+            android:padding="30dp"
+            android:max="20"
+            android:progress="5" />
         <LinearLayout
             android:orientation="horizontal"
             android:minWidth="25px"
@@ -97,7 +111,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
-            android:id="@+id/radioGroup1">
+            android:id="@+id/radioGroup_broden">
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
