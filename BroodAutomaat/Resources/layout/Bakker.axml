@@ -111,17 +111,37 @@
         android:id="@+id/button_help"
         android:background="@drawable/helpbutton"
         android:layout_marginLeft="-25dp"
-        android:layout_marginRight="-25dp" />
+        android:layout_marginRight="-25dp"
+        android:layout_marginTop="10dp" />
     <LinearLayout
         android:layout_width="20dp"
         android:layout_height="match_parent"
         android:background="@color/BakkerButton"
         android:id="@+id/linearLayout1" />
-    <ImageView
-        android:src="@drawable/map"
+    <AbsoluteLayout
+        android:id="@+id/maplayout"
         android:layout_height="match_parent"
         android:layout_width="15dip"
         android:layout_weight="0.7"
-        android:background="@drawable/map"
-        android:scaleType="centerCrop" />
+        android:background="@drawable/map">
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/button_add"
+            android:background="@drawable/addbutton"
+            android:layout_x="10dp"
+            android:layout_y="10dp" />
+        <fragment
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.google.android.gms.maps.MapFragment" />
+        <AbsoluteLayout
+            android:id="@+id/statistics"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:background="@drawable/stats"
+            android:visibility="gone"
+            android:clickable="true" />
+    </AbsoluteLayout>
 </LinearLayout>

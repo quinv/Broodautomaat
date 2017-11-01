@@ -186,13 +186,25 @@
         android:id="@+id/button_help"
         android:background="@drawable/helpbutton"
         android:layout_marginLeft="-25dp"
-        android:layout_marginRight="-25dp" />
-    <ImageView
-        android:src="@drawable/map"
+        android:layout_marginRight="-25dp"
+        android:layout_marginTop="10dp" />
+    <AbsoluteLayout
+        android:id="@+id/map"
         android:layout_height="match_parent"
         android:layout_width="15dip"
         android:layout_weight="0.7"
-        android:id="@+id/imageView2"
-        android:background="@drawable/map"
-        android:scaleType="centerCrop" />
+        android:background="@drawable/map">
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/button_help"
+            android:background="@drawable/addbutton"
+            android:layout_x="30dp"
+            android:layout_y="10dp" />
+        <fragment
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.google.android.gms.maps.MapFragment" />
+    </AbsoluteLayout>
 </LinearLayout>

@@ -4,15 +4,19 @@ using Android.OS;
 using Android.Content.PM;
 using Android.Views;
 using Android.Graphics;
+using Android.Gms.Maps;
+using Android.Gms.Maps.Model;
 
 namespace BroodAutomaat
 {
 
     [Activity(Label = "BroodAutomaat", Icon = "@mipmap/icon", ScreenOrientation = ScreenOrientation.Landscape,
         Theme = "@android:style/Theme.DeviceDefault.NoActionBar")]
-    public class BakkerActivity : Activity
+    public class BakkerActivity : Activity, IOnMapReadyCallback
     {
         Button[] buttonsBakker = new Button[4];
+        Button addAutomaat;
+        View statistics;
 
         private enum BakkerSelection
         {
@@ -30,25 +34,41 @@ namespace BroodAutomaat
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Bakker);
-            
-            FontChangeCrawler fontChangeCrawler = new FontChangeCrawler(Typeface.CreateFromAsset(Assets, "Fonts/krungthep.ttf"));
-            fontChangeCrawler.ReplaceFonts(FindViewById<ViewGroup>(Resource.Id.root_bakker));
 
+            FontChangeCrawler.ChangeTypeFaceToKrungthep(FindViewById(Resource.Id.root_bakker), Assets);
+
+            //get views
             Button logoutButton = FindViewById<Button>(Resource.Id.button_logout);
-            logoutButton.Click += BakkerLogOut;
-
             Button helpButton = FindViewById<Button>(Resource.Id.button_help);
-            helpButton.Click += Help;
+            addAutomaat = FindViewById<Button>(Resource.Id.button_add);
+            statistics = FindViewById(Resource.Id.statistics);
 
             buttonsBakker[(int)BakkerSelection.automaten] = FindViewById<Button>(Resource.Id.button_automaten);
             buttonsBakker[(int)BakkerSelection.aanvullen] = FindViewById<Button>(Resource.Id.button_aanvullen);
             buttonsBakker[(int)BakkerSelection.statistieken] = FindViewById<Button>(Resource.Id.button_statistieken);
             buttonsBakker[(int)BakkerSelection.route] = FindViewById<Button>(Resource.Id.button_route);
 
+            //add events
+            logoutButton.Click += BakkerLogOut;
+            helpButton.Click += Help;
+            addAutomaat.Click += AddNewAutomaat;
+            
             for (int i = 0; i < buttonsBakker.Length; i++)
             {
                 buttonsBakker[i].Click += ChangeBakkerSelection;
             }
+
+            //add map
+            MapFragment mapFragment = FragmentManager.FindFragmentById<MapFragment>(Resource.Id.map);
+            if (mapFragment != null)
+            {
+                mapFragment.GetMapAsync(this);
+            }
+        }
+
+        private void AddNewAutomaat(object sender, System.EventArgs e)
+        {
+            //add new bread machine
         }
 
         private void ChangeBakkerSelection(object sender, System.EventArgs e)
@@ -59,18 +79,22 @@ namespace BroodAutomaat
                 layoutParameters.RightMargin = Resources.GetDimensionPixelSize(Resource.Dimension.bakkerButtonMargin);
                 buttonsBakker[i].LayoutParameters = layoutParameters;
             }
+            addAutomaat.Visibility = ViewStates.Gone;
+            statistics.Visibility = ViewStates.Gone;
 
             Button btn = sender as Button;
             switch (btn.Id)
             {
                 case Resource.Id.button_automaten:
                     activeButton = BakkerSelection.automaten;
+                    addAutomaat.Visibility = ViewStates.Visible;
                     break;
                 case Resource.Id.button_aanvullen:
                     activeButton = BakkerSelection.aanvullen;
                     break;
                 case Resource.Id.button_statistieken:
                     activeButton = BakkerSelection.statistieken;
+                    statistics.Visibility = ViewStates.Visible;
                     break;
                 case Resource.Id.button_route:
                     activeButton = BakkerSelection.route;
@@ -109,8 +133,24 @@ namespace BroodAutomaat
 
         private void BakkerLogOut(object sender, System.EventArgs e)
         {
+            //switch activity
             StartActivity(typeof(MainActivity));
             Finish();
+        }
+
+        public void OnMapReady(GoogleMap googleMap)
+        {
+            //adds marker at kavka and zooms in on it
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.SetPosition(new LatLng(51.2156454, 4.4031166)); //kavka coordinates
+            markerOptions.SetTitle("my position");
+            //markerOptions.SetIcon(<Icon>); //use to set icon
+            googleMap.AddMarker(markerOptions);
+            googleMap.MoveCamera(CameraUpdateFactory.NewLatLngZoom(markerOptions.Position, 17));
+
+            googleMap.UiSettings.CompassEnabled = true;
+            googleMap.UiSettings.MyLocationButtonEnabled = true;
+            googleMap.UiSettings.ZoomControlsEnabled = true;
         }
     }
 }

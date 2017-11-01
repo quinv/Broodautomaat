@@ -5,12 +5,14 @@ using Android.Content.PM;
 using Android.Util;
 using Android.Views;
 using Android.Graphics;
+using Android.Gms.Maps;
+using Android.Gms.Maps.Model;
 
 namespace BroodAutomaat
 {
     [Activity(Label = "BroodAutomaat", MainLauncher = true, Icon = "@mipmap/icon", ScreenOrientation = ScreenOrientation.Landscape,
         Theme = "@android:style/Theme.DeviceDefault.NoActionBar")]
-    public class MainActivity : Activity
+    public class MainActivity : Activity, IOnMapReadyCallback
     {
 
         private enum BreadTypes
@@ -47,13 +49,20 @@ namespace BroodAutomaat
             loginButton.Click += BakkerLogIn;
             helpButton.Click += Help;
             breadGroup.CheckedChange += BreadGroup_CheckedChange;
-            seekBarRange.ProgressChanged += SeekBarRange_ProgressChanged; ;
+            seekBarRange.ProgressChanged += SeekBarRange_ProgressChanged;
+
+            //adding map
+            MapFragment mapFragment = FragmentManager.FindFragmentById<MapFragment>(Resource.Id.map);
+            if (mapFragment != null)
+            {
+                mapFragment.GetMapAsync(this);
+            }
         }
 
         private void SeekBarRange_ProgressChanged(object sender, SeekBar.ProgressChangedEventArgs e)
         {
             SeekBar seekBar = sender as SeekBar;
-            seekBarValue = (int)seekBar.Progress;
+            seekBarValue = seekBar.Progress;
             seekBarText.Text = seekBarValue.ToString() + "km";
         }
 
@@ -88,6 +97,21 @@ namespace BroodAutomaat
         {
             StartActivity(typeof(BakkerActivity));
             Finish();
+        }
+
+        public void OnMapReady(GoogleMap googleMap)
+        {
+            //adds marker at kavka and zooms in on it
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.SetPosition(new LatLng(51.2156454, 4.4031166)); //kavka coordinates / should maybe be switched to gps coordinates
+            markerOptions.SetTitle("my position");
+            //markerOptions.SetIcon(<Icon>); //use to set icon
+            googleMap.AddMarker(markerOptions);
+            googleMap.MoveCamera(CameraUpdateFactory.NewLatLngZoom(markerOptions.Position, 17));
+
+            googleMap.UiSettings.CompassEnabled = true;
+            googleMap.UiSettings.MyLocationButtonEnabled = true;
+            googleMap.UiSettings.ZoomControlsEnabled = true;
         }
     }
 }
